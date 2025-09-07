@@ -20,7 +20,7 @@ def create_app():
 
     return app
 
-# Para `flask --app app.app run`
+# Para `flask --app app.app run` #
 app = create_app()
 
 if __name__ == "__main__":
