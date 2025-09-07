@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 
 def create_app():
     app = Flask(__name__)
-    app.config.update(SECRET_KEY="change-me now")
+    app.config.update(SECRET_KEY="Hsgdt-dks8d7-sOs9d8")
 
     @app.get("/")
     def index():
