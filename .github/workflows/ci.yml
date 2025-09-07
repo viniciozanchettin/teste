@@ -57,7 +57,7 @@ jobs:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_PORT: ${{ secrets.SSH_PORT }}
 
-      - name: Rsync source to remote host
+      - name: Rsync source to remote host1
         run: >
           rsync -azv --delete
           --exclude ".git" --exclude ".github" --exclude ".venv"
