@@ -70,7 +70,7 @@ jobs:
           APP_DIR:  ${{ secrets.APP_DIR }}
 
       # depois do "Rsync source to remote host"
-      - name: Setup venv + deps e (re)subir Gunicorn
+      - name: Setup venv + deps e (re)subir Gunicorn 1
         run: |
           ssh -i ~/.ssh/id_deploy -o StrictHostKeyChecking=no -p "${SSH_PORT}" \
           "${SSH_USER}@${SSH_HOST}" bash -lc "
