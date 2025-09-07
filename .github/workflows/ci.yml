@@ -47,7 +47,7 @@ jobs:
         run: |
           install -m 700 -d ~/.ssh
           # grava a chave sem newline extra e remove CRLF se veio do Windows
-          printf '%s' "${{ SSH_KEY }}" > ~/.ssh/id_deploy
+          printf '%s' "${SSH_KEY}" > ~/.ssh/id_deploy
           sed -i 's/\r$//' ~/.ssh/id_deploy
           chmod 600 ~/.ssh/id_deploy
           # não falha se o host não responder aqui
