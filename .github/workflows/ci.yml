@@ -42,6 +42,18 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y rsync openssh-client
 
+      - name: Setup SSH key yes
+        run: |
+          mkdir -p ~/.ssh
+          echo "${SSH_KEY}" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          # Adiciona fingerprint do host para evitar prompt
+          ssh-keyscan -p "${SSH_PORT}" "${SSH_HOST}" >> ~/.ssh/known_hosts
+        env:
+          SSH_KEY:  ${{ secrets.SSH_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+
       - name: Ensure destination dir and permissions
         run: |
           ssh -i ~/.ssh/id_deploy -o StrictHostKeyChecking=no -p ${SSH_PORT} \
@@ -54,18 +66,6 @@ jobs:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_PORT: ${{ secrets.SSH_PORT }}
           APP_DIR:  ${{ secrets.APP_DIR }}
-
-      - name: Setup SSH key yes
-        run: |
-          mkdir -p ~/.ssh
-          echo "${SSH_KEY}" > ~/.ssh/id_deploy
-          chmod 600 ~/.ssh/id_deploy
-          # Adiciona fingerprint do host para evitar prompt
-          ssh-keyscan -p "${SSH_PORT}" "${SSH_HOST}" >> ~/.ssh/known_hosts
-        env:
-          SSH_KEY:  ${{ secrets.SSH_KEY }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_PORT: ${{ secrets.SSH_PORT }}
 
       - name: Rsync source to remote host
         run: |
