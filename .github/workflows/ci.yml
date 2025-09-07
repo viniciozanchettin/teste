@@ -57,7 +57,7 @@ jobs:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_PORT: ${{ secrets.SSH_PORT }}
 
-      - name: Rsync source to remote host 1
+      - name: Rsync source to remote host
         run: >
           rsync -azv --delete
           --exclude ".git" --exclude ".github" --exclude ".venv"
@@ -68,3 +68,35 @@ jobs:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_PORT: ${{ secrets.SSH_PORT }}
           APP_DIR:  ${{ secrets.APP_DIR }}
+
+      # depois do "Rsync source to remote host"
+      - name: Setup venv + deps e (re)subir Gunicorn
+        run: |
+          ssh -i ~/.ssh/id_deploy -o StrictHostKeyChecking=no -p "${SSH_PORT}" \
+          "${SSH_USER}@${SSH_HOST}" bash -lc "
+          set -e
+          APP_DIR='${APP_DIR}'
+          VENV=\"\$APP_DIR/.venv\"
+          cd \"\$APP_DIR\"
+
+          [ -d \"\$VENV\" ] || python3 -m venv \"\$VENV\"
+          \"\$VENV/bin/python3\" -m pip install --upgrade pip
+          [ -f requirements.txt ] && \"\$VENV/bin/pip\" install -r requirements.txt || true
+
+          # para anterior se estiver rodando
+          if [ -f gunicorn.pid ] && kill -0 \$(cat gunicorn.pid) 2>/dev/null; then
+            kill -TERM \$(cat gunicorn.pid) || true
+            sleep 2
+          fi
+
+          # sobe nova
+          nohup \"\$VENV/bin/gunicorn\" -w 2 -b 0.0.0.0:8000 app.app:app \
+          > \"\$APP_DIR/gunicorn.log\" 2>&1 &
+
+          echo \$! > gunicorn.pid
+          "
+        env:
+          SSH_HOST:  ${{ secrets.SSH_HOST }}
+          SSH_USER:  ${{ secrets.SSH_USER }}
+          SSH_PORT:  ${{ secrets.SSH_PORT }}
+          APP_DIR:   ${{ secrets.APP_DIR }}
