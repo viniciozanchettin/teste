@@ -85,7 +85,7 @@ jobs:
 
           # para anterior se estiver rodando
           if [ -f gunicorn.pid ] && kill -0 \$(cat gunicorn.pid) 2>/dev/null; then
-            kill -TERM \$(cat gunicorn.pid) || true
+            kill -TERM \$(cat ../gunicorn.pid) || true
             sleep 2
           fi
 
@@ -93,7 +93,7 @@ jobs:
           nohup \"\$VENV/bin/gunicorn\" -w 2 -b 0.0.0.0:8000 app.app:app \
           > \"\$APP_DIR/gunicorn.log\" 2>&1 &
 
-          echo \$! > gunicorn.pid
+          echo \$! > ../gunicorn.pid
           "
         env:
           SSH_HOST:  ${{ secrets.SSH_HOST }}
