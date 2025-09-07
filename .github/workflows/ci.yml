@@ -37,7 +37,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup SSH key
+      - name: Setup SSH key yes
         run: |
           mkdir -p ~/.ssh
           echo "${SSH_KEY}" > ~/.ssh/id_deploy
