@@ -53,7 +53,7 @@ jobs:
           # não falha se o host não responder aqui
           ssh-keyscan -T 10 -p "${SSH_PORT}" "${SSH_HOST}" >> ~/.ssh/known_hosts
         env:
-          SSH_KEY:  ${{ vars.SSH_KEY }}
+          SSH_KEY:  ${{ secrets.SSH_KEY }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_PORT: ${{ secrets.SSH_PORT }}
 
