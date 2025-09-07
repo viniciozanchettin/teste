@@ -24,4 +24,4 @@ jobs:
           if [ -f requirements.txt ]; then python3 -m pip install -r requirements.txt; fi
 
       - name: Run tests (unittest)
-        run: python3 -m unittest -v
+        run: python3 -m unittest discover -s tests -p "test_*.py" -v
