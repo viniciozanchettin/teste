@@ -84,9 +84,9 @@ jobs:
           [ -f requirements.txt ] && \"\$VENV/bin/pip\" install -r requirements.txt || true
 
           # para anterior se estiver rodando
-          if [ -f gunicorn.pid ] && kill -0 \$(cat gunicorn.pid) 2>/dev/null; then
+          if [ -f ../gunicorn.pid ] && kill -0 \$(cat ../gunicorn.pid) 2>/dev/null; then
             kill -TERM \$(cat ../gunicorn.pid) || true
-            sleep 2
+            sleep 10
           fi
 
           # sobe nova
